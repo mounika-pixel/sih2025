@@ -1,8 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Dashboard = () => {
+const Dashboard = ({ onLogout }) => {
+  const navigate = useNavigate();
   const userType = localStorage.getItem('userType') || 'faculty';
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      localStorage.removeItem('userType');
+    }
+    navigate('/login');
+  };
 
   const facultyOptions = [
     {
@@ -63,10 +73,7 @@ const Dashboard = () => {
               </span>
             </div>
             <button 
-              onClick={() => {
-                localStorage.removeItem('userType');
-                window.location.reload();
-              }}
+              onClick={handleLogout}
               className="text-accent hover:text-opacity-80 font-medium"
             >
               Logout

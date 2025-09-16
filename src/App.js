@@ -9,7 +9,14 @@ import LeaveRequests from './components/LeaveRequests';
 import Preferences from './components/Preferences';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(() => {
+    return localStorage.getItem('userType') !== null;
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem('userType');
+    setIsAuthenticated(false);
+  };
 
   return (
     <Router>
@@ -27,7 +34,7 @@ function App() {
             path="/dashboard" 
             element={
               isAuthenticated ? 
-              <Dashboard /> : 
+              <Dashboard onLogout={handleLogout} /> : 
               <Navigate to="/login" replace />
             } 
           />
